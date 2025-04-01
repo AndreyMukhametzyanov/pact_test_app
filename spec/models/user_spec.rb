@@ -11,7 +11,7 @@ RSpec.describe User, type: :model do
     it { should validate_presence_of(:gender) }
     it { should allow_value('user@example.com').for(:email) }
     it { should validate_uniqueness_of(:email) }
-    it { should validate_inclusion_of(:gender).in_array(['male', 'female']) }
+    it { should validate_inclusion_of(:gender).in_array([ 'male', 'female' ]) }
     it { should validate_numericality_of(:age).is_greater_than(0).is_less_than_or_equal_to(90) }
   end
 

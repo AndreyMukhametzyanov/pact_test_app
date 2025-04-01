@@ -10,19 +10,15 @@ class Users::Create < ActiveInteraction::Base
   validates :gender, inclusion: { in: %w[male female] }
 
   def execute
-    return errors.add(:email, "has already been taken") if User.exists?(email: email)
-
-    user = User.new(user_params)
-    user.full_name = full_name
-    unless user.save
-      errors.add(:base, "User creation failed")
-      return nil
-    end
+    user = User.create!(user_params)
 
     add_interests(user)
     add_skills(user)
 
     user
+  rescue ActiveRecord::RecordInvalid => e
+    errors.add(:base, "User creation failed: #{e.message}")
+    nil
   rescue => e
     errors.add(:base, e.message)
     nil
@@ -37,9 +33,7 @@ class Users::Create < ActiveInteraction::Base
     }
   end
 
-  def full_name
-    "#{surname} #{name} #{patronymic}"
-  end
+
 
   def add_interests(user)
     return if interests.blank?

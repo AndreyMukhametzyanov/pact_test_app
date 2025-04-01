@@ -8,7 +8,7 @@ FactoryBot.define do
     nationality { "American" }
     country { "USA" }
     gender { "male" }
-    interests { [FactoryBot.create(:interest, name: "Reading"), FactoryBot.create(:interest, name: "Hiking")] }
-    skills { [FactoryBot.create(:skill, name: "Ruby"), FactoryBot.create(:skill, name: "Rails")] }
+    interests { [ FactoryBot.create(:interest, name: "Reading"), FactoryBot.create(:interest, name: "Hiking") ] }
+    skills { [ FactoryBot.create(:skill, name: "Ruby"), FactoryBot.create(:skill, name: "Rails") ] }
   end
 end

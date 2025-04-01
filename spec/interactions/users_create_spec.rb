@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe Users::Create, type: :interaction do
-  let(:valid_interests) { ['Reading', 'Sports'] }
+  let(:valid_interests) { [ 'Reading', 'Sports' ] }
   let(:valid_skills) { 'Ruby, Rails' }
 
   def unique_email
@@ -41,7 +41,7 @@ RSpec.describe Users::Create, type: :interaction do
     end
 
     context 'when required attributes are missing' do
-      [:name, :email, :age, :nationality, :country, :gender].each do |attr|
+      [ :name, :email, :age, :nationality, :country, :gender ].each do |attr|
         it "fails when #{attr} is missing" do
           invalid_params = valid_params.except(attr)
           result = Users::Create.run(invalid_params)
@@ -61,12 +61,12 @@ RSpec.describe Users::Create, type: :interaction do
     end
 
     context 'when email is already taken' do
-      before(:each) { create(:user, email: valid_params[:email]) }
+      before { create(:user, email: valid_params[:email]) }
 
-      it 'fails to create a user' do
+      it 'fails with base error' do
         result = Users::Create.run(valid_params)
         expect(result).not_to be_valid
-        expect(result.errors[:email]).to include('has already been taken')
+        expect(result.errors[:base]).to include(/User creation failed/)
       end
     end
 
@@ -102,14 +102,14 @@ RSpec.describe Users::Create, type: :interaction do
 
     context 'when user creation fails' do
       before do
-        allow_any_instance_of(User).to receive(:save).and_return(false)
-        allow_any_instance_of(User).to receive_message_chain(:errors, :full_messages).and_return(["User creation failed"])
+        allow(User).to receive(:create!).and_raise(ActiveRecord::RecordInvalid.new(User.new))
+        allow_any_instance_of(ActiveRecord::Base).to receive_message_chain(:errors, :full_messages).and_return([ "User creation failed: Validation failed: " ])
       end
 
       it 'does not create a user and shows the appropriate error message' do
         result = Users::Create.run(valid_params)
         expect(result).not_to be_valid
-        expect(result.errors.full_messages).to include("User creation failed")
+        expect(result.errors.full_messages.first).to include("User creation failed")
         expect(User.count).to eq(0)
       end
     end

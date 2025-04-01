@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  before_save :set_full_name
+
   has_and_belongs_to_many :interests
   has_and_belongs_to_many :skills
 
@@ -8,4 +10,8 @@ class User < ApplicationRecord
   validates :age, numericality: { greater_than: 0, less_than_or_equal_to: 90 }
   validates_associated :interests
   validates_associated :skills
+
+  def set_full_name
+    self.full_name = "#{surname} #{name} #{patronymic}"
+  end
 end
