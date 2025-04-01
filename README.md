@@ -31,6 +31,8 @@
 4. **Запуск и тестирование** 
 - для запуска используйте:
   ```ruby
+  bundle install
+  
   rails s
   ```
 
@@ -77,7 +79,8 @@
         "skills": ""
       }
     }'
-      или 
+  ```
+  или 
   ```html
   curl -X POST http://localhost:3000/users \
     -H "Content-Type: application/json" \
@@ -97,3 +100,9 @@
     }'
   ```
  5. **Написаны тесты rspec.**
+    
+      Запуск тестов
+      
+     ```ruby
+     make rspec
+     ```
