@@ -45,7 +45,7 @@ class Users::Create < ActiveInteraction::Base
   def add_skills(user)
     return if skills.blank?
 
-    skills.split(',').each do |skill_name|
+    skills.split(",").each do |skill_name|
       skill = Skill.find_or_create_by!(name: skill_name.strip)
       user.skills << skill unless user.skills.exists?(skill.id)
     end

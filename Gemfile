@@ -17,6 +17,7 @@ group :development, :test do
   gem "bundle-audit", "~> 0.1.0"
   gem "bundler-leak", require: false
   gem "faker", "~> 2.23"
+  gem "rubocop-rails-omakase"
 end
 
 group :test do

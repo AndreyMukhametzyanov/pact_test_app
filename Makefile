@@ -1,5 +1,5 @@
 .PHONY: .check
-.check: bundle audit brakeman rspec
+.check: bundle audit brakeman rubocop rspec 
 
 .PHONY: check
 check:
