@@ -47,41 +47,6 @@
   curl -X POST http://localhost:3000/users \
     -H "Content-Type: application/json" \
     -d '{
-      "user": {
-        "name": "John",
-        "patronymic": "Doe",
-        "surname": "Smith",
-        "email": "john.doe@example.com",
-        "age": 30,
-        "nationality": "Country",
-        "country": "Country",
-        "gender": "male"
-      }
-    }'
-  ``` 
-  или 
-  ```html
-  curl -X POST http://localhost:3000/users \
-    -H "Content-Type: application/json" \
-    -d '{
-      "user": {
-        "name": "John",
-        "patronymic": "Doe",
-        "surname": "Smith",
-        "email": "john.doe@example2.com",
-        "age": 30,
-        "nationality": "Country",
-        "country": "Country",
-        "gender": "male",
-        "interests": [],
-        "skills": ""
-      }
-    }'
-      или 
-  ```html
-  curl -X POST http://localhost:3000/users \
-    -H "Content-Type: application/json" \
-    -d '{
     "user": {
       "name": "Sam",
       "patronymic": "Doe",

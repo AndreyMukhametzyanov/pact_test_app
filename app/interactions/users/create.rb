@@ -1,8 +1,8 @@
 class Users::Create < ActiveInteraction::Base
   string :surname, :name, :patronymic, :email, :nationality, :country, :gender
-  string :skills, default: ''
+  string :skills
   integer :age
-  array :interests, default: []
+  array :interests
 
   validates :age, numericality: { greater_than: 0, less_than_or_equal_to: 90 }
   validates :name, :patronymic, :email, :age, :nationality, :country, :gender, presence: true
@@ -29,17 +29,17 @@ class Users::Create < ActiveInteraction::Base
   def user_params
     {
       surname:, name:, patronymic:, email:, age:,
-      nationality:, country:, gender:,
+      nationality:, country:, gender:
     }
   end
-
-
 
   def add_interests(user)
     return if interests.blank?
 
-    interests_records = Interest.find_or_create_by!(name: interests)
-    user.interests << interests_records
+    interests.each do |interest_name|
+      interest = Interest.find_or_create_by!(name: interest_name)
+      user.interests << interest unless user.interests.exists?(interest.id)
+    end
   end
 
   def add_skills(user)
@@ -47,7 +47,7 @@ class Users::Create < ActiveInteraction::Base
 
     skills.split(',').each do |skill_name|
       skill = Skill.find_or_create_by!(name: skill_name.strip)
-      user.skills << skill unless user.skills.include?(skill)
+      user.skills << skill unless user.skills.exists?(skill.id)
     end
   end
 end

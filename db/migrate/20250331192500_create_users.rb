@@ -9,6 +9,7 @@ class CreateUsers < ActiveRecord::Migration[7.2]
       t.string :nationality
       t.string :country
       t.string :gender
+      t.string :full_name
 
       t.timestamps
     end

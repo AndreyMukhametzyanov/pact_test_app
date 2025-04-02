@@ -70,6 +70,16 @@ RSpec.describe Users::Create, type: :interaction do
       end
     end
 
+    context 'when interests is not an array' do
+      it 'fails with a validation error' do
+        invalid_interests_params = valid_params.merge(interests: 'Not an array')
+        result = Users::Create.run(invalid_interests_params)
+
+        expect(result).not_to be_valid
+        expect(result.errors.messages).to include(interests: [ 'is not a valid array' ])
+      end
+    end
+
     context 'when age is out of range' do
       it 'fails when age is too low' do
         result = Users::Create.run(valid_params.merge(age: 0))
@@ -103,7 +113,8 @@ RSpec.describe Users::Create, type: :interaction do
     context 'when user creation fails' do
       before do
         allow(User).to receive(:create!).and_raise(ActiveRecord::RecordInvalid.new(User.new))
-        allow_any_instance_of(ActiveRecord::Base).to receive_message_chain(:errors, :full_messages).and_return([ "User creation failed: Validation failed: " ])
+        allow_any_instance_of(ActiveRecord::Base).to receive_message_chain(:errors, :full_messages)
+                                                 .and_return([ "User creation failed: Validation failed: " ])
       end
 
       it 'does not create a user and shows the appropriate error message' do
@@ -135,6 +146,26 @@ RSpec.describe Users::Create, type: :interaction do
         result = Users::Create.run(valid_params)
         expect(result).not_to be_valid
         expect(result.errors[:base]).not_to be_empty
+      end
+    end
+
+    context 'when adding duplicate associations' do
+      before do
+        @user = Users::Create.run!(valid_params)
+        @interest = Interest.first
+        @skill = Skill.first
+      end
+
+      it 'prevents duplicate interests through association' do
+        expect {
+          @user.interests << @interest
+        }.to raise_error(ActiveRecord::RecordNotUnique)
+      end
+
+      it 'prevents duplicate skills through association' do
+        expect {
+          @user.skills << @skill
+        }.to raise_error(ActiveRecord::RecordNotUnique)
       end
     end
   end

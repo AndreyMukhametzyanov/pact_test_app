@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_01_174302) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_31_192729) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -23,8 +23,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_01_174302) do
   create_table "interests_users", id: false, force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "interest_id", null: false
-    t.index ["interest_id", "user_id"], name: "index_interests_users_on_interest_id_and_user_id"
-    t.index ["user_id", "interest_id"], name: "index_interests_users_on_user_id_and_interest_id"
+    t.index ["interest_id", "user_id"], name: "index_interests_users_on_interest_and_user", unique: true
+    t.index ["user_id", "interest_id"], name: "index_interests_users_on_user_and_interest", unique: true
   end
 
   create_table "skills", force: :cascade do |t|
@@ -36,8 +36,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_01_174302) do
   create_table "skills_users", id: false, force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "skill_id", null: false
-    t.index ["skill_id", "user_id"], name: "index_skills_users_on_skill_id_and_user_id"
-    t.index ["user_id", "skill_id"], name: "index_skills_users_on_user_id_and_skill_id"
+    t.index ["skill_id", "user_id"], name: "index_skills_users_on_skill_and_user", unique: true
+    t.index ["user_id", "skill_id"], name: "index_skills_users_on_user_and_skill", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -49,8 +49,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_01_174302) do
     t.string "nationality"
     t.string "country"
     t.string "gender"
+    t.string "full_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "full_name"
   end
 end
